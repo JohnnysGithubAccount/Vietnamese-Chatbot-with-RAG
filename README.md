@@ -25,7 +25,7 @@ To set up the project, follow these steps:
    pip install -r requirements.txt
 
 3. **Download Pre-trained Models**:
-    You can go look for the model by using the name on Hugging Face.
+    You can go look for the model by using the name on Hugging Face. Download and then save them in "better version/model"
 
 ## Usage
 
@@ -40,5 +40,3 @@ To set up the project, follow these steps:
 2. **Jump to web app**:
     ![img_1.png](img_1.png)
    
-=======
->>>>>>> 90eab4dabe67fd905769f2df558dd2046d985692
