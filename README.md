@@ -18,7 +18,7 @@ To set up the project, follow these steps:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/JohnnysGithubAccount/Q-and-A-on-how-to-write-a-research-paper.git
+   git clone https://github.com/JohnnysGithubAccount/Vietnamese-Chatbot-with-RAG.git
 
 2. **Install dependencies**:
    ```bash
