@@ -3,20 +3,27 @@ from langchain_community.llms import CTransformers
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain_community.vectorstores import FAISS
+import time
+import torch
+
 
 # configs
-model_file = 'model/vinallama-7b-chat_q5_0.gguf'
+model_file = 'better version/model/vietnamese-llama2-7b-40gb.Q2_K.gguf'
+# model_file = 'model/Benchmaxx-Llama-3.2-1B-Instruct.IQ4_XS.gguf'
 vector_db_path = 'vector_store/db_faiss'
 model_name = "model/all-MiniLM-L6-v2-f16.gguf"
 
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+print(device)
 
 # load LLM
 def load_llm(model_file):
     llm = CTransformers(
         model=model_file,
-        model_type='llma',
-        max_new_tokens=1024,
-        temperature=0.01
+        model_type='llama',
+        max_new_tokens=256,
+        temperature=0.01,
+        use_fp16=torch.cuda.is_available()
     )
     return llm
 
@@ -24,7 +31,7 @@ def load_llm(model_file):
 # create prompt template
 def create_prompt(template):
     # when using retrieval QA, always have to include the context (the text will be retrieved)
-    prompt = PromptTemplate(template=template, input_variable=['context', 'question'])
+    prompt = PromptTemplate(template=template, input_variables=['context', 'question'])
     return prompt
 
 
@@ -44,12 +51,16 @@ def create_qa_chain(prompt, llm, db):
 # read from vector db
 def read_vector_db():
     embedding_model = GPT4AllEmbeddings(model_file=model_name)
-    db = FAISS.load_local(vector_db_path, embedding_model)
+    db = FAISS.load_local(vector_db_path,
+                          embedding_model,
+                          allow_dangerous_deserialization=True)
     return db
 
 
 if __name__ == "__main__":
+    print("loaded db")
     db = read_vector_db()
+    print("loaded llm")
     llm = load_llm(model_file)
 
     template = """<|im_start|>system
@@ -61,11 +72,13 @@ if __name__ == "__main__":
     """
 
     prompt = create_prompt(template)
-
+    print("chain created")
     llm_chain = create_qa_chain(prompt, llm, db)
 
     # run the chain
-    # question = "Phần Abstract trong một research paper có tác dụng gì?"
-    question = input("Bạn có thể hỏi tôi những thông tin liên quan tới cách viết research paper.\n")
+    start_time = time.time()
+    # question = input("Hỏi gì liên quan tới research paper đi?\n")
+    question = "Cách viết research paper"
     response = llm_chain.invoke({"query": question})
     print(response)
+    print(time.time() - start_time)

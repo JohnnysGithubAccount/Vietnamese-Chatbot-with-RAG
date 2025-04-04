@@ -8,7 +8,7 @@ from accelerate import Accelerator
 import gc
 
 # configs
-model_file = 'model/vinallama-7b-chat_q5_0.gguf'
+model_file = 'better version/model/vinallama-7b-chat_q5_0.gguf'
 vector_db_path = 'vector_store/db_faiss'
 model_name = "model/all-MiniLM-L6-v2-f16.gguf"
 

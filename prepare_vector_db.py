@@ -50,6 +50,7 @@ def create_db_from_file(pdf_data_path: str = 'data'):
     chunks = text_splitter.split_documents(documents)
 
     model_name = "model/all-MiniLM-L6-v2.gguf2.f16.gguf"
+    # model_name = "model/vietnamese-llama2-7b-40gb.Q4_0.gguf"
     embedding_model = GPT4AllEmbeddings(model_file=model_name)
 
     db = FAISS.from_documents(chunks, embedding_model)
@@ -58,6 +59,6 @@ def create_db_from_file(pdf_data_path: str = 'data'):
 
 
 if __name__ == "__main__":
-    create_vector_db_from_text()
+    # create_vector_db_from_text()
     create_db_from_file()
     
